@@ -1,0 +1,83 @@
+import javax.swing.*;
+
+public class ImageButtonExample {
+public static void main(String[] args) {
+JFrame frame = new JFrame("Image Button Example");
+frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+frame.setSize(300, 200);
+
+// Load the image
+ImageIcon icon = new ImageIcon("path/to/your/image.png");
+
+// Create a JButton with the image
+JButton button = new JButton(icon);
+
+// Add the button to the frame
+frame.add(button);
+frame.setVisible(true);
+}
+
+button.setBorderPainted(false); // Remove border
+button.setContentAreaFilled(false); // Remove background fill
+button.setFocusPainted(false); // Remove focus outline
+
+SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                window window = new window();
+                window.setVisible(true);
+            }
+        });
+
+public class window extends JFrame {
+    JPanel pane = new JPanel();
+    GridBagConstraints gbc = new GridBagConstraints();
+
+    public window() {
+        this.setLayout(new GridBagLayout());
+        this.setTitle("Dictionary");
+        this.setDefaultCloseOperation(3);
+        this.setPreferredSize(new Dimension(500, 300));
+        this.setResizable(true);
+        GridBagLayout gridBag = new GridBagLayout();
+        this.pane.setLayout(gridBag);
+        this.setContentPane(this.pane);
+        Label queryLabel = new Label("What word do you need defined?");
+        Label additionalInformationLabel = new Label("(definitions get worse the farther you go)");
+        Button leftButton = new Button("<-");
+        Button rightButton = new Button("->");
+        TextField textField = new TextField();
+        Label defLabel = new Label("definition will go here");
+        this.gbc.insets = new Insets(5, 5, 5, 5);
+        this.gbc.gridx = 2;
+        this.gbc.gridy = 0;
+        gridBag.setConstraints(queryLabel, this.gbc);
+        this.pane.add(queryLabel, this.gbc);
+        this.gbc.gridy = 1;
+        gridBag.setConstraints(additionalInformationLabel, this.gbc);
+        this.pane.add(additionalInformationLabel, this.gbc);
+        this.gbc.gridy = 2;
+        this.gbc.ipadx = 100;
+        gridBag.setConstraints(textField, this.gbc);
+        this.pane.add(textField, this.gbc);
+        this.gbc.ipadx = 0;
+        this.gbc.gridy = 3;
+        gridBag.setConstraints(defLabel, this.gbc);
+        this.pane.add(defLabel, this.gbc);
+        this.gbc.gridy = 2;
+        this.gbc.gridx = 1;
+        gridBag.setConstraints(leftButton, this.gbc);
+        this.pane.add(leftButton, this.gbc);
+        this.gbc.gridx = 3;
+        gridBag.setConstraints(rightButton, this.gbc);
+        this.pane.add(rightButton, this.gbc);
+        this.pack();
+    }
+}
+
+ public static boolean confirmCorrectUserInfo(String userName, String userPassword, LinkedList user, LinkedList password) {
+        for (int p = 0; p < user.size(); p++) {
+            if ((user.get(p).equals(userName)) && password.get(p).equals(userPassword)) {
+                return true;
+            }
+
+
