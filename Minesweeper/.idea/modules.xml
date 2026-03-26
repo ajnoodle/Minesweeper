@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Minesweeper.iml" filepath="$PROJECT_DIR$/Minesweeper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TableFunctions/TableFunctions.iml" filepath="$PROJECT_DIR$/TableFunctions/TableFunctions.iml" />
     </modules>
   </component>
 </project>
