@@ -10,9 +10,13 @@ public class HomeScreen extends JFrame {
     private JTextField percentSizeField;
     private JButton generateButton;
     private JLabel errorLabel;
+    int xValue;
+    int yValue;
+    int percent;
 
-    public HomeScreen(){
-        setTitle("Login");
+
+    public HomeScreen() {
+        setTitle("Minesweeper");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setPreferredSize(new Dimension(500, 200));
         setResizable(false);
@@ -22,8 +26,32 @@ public class HomeScreen extends JFrame {
         generateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                    try {
+                        xValue = Integer.parseInt(xSizeField.getText());
+                        yValue = Integer.parseInt(ySizeField.getText());
+                        percent = Integer.parseInt(percentSizeField.getText());
 
-            }
+                        if (xValue >= 5 && xValue <= 50 && yValue >= 5 && yValue <= 50) {
+                            if (percent >= 5 && percent <= 70) {
+
+                                SwingUtilities.invokeLater(new Runnable() {
+                                    public void run() {
+                                        TableScreen TableScreen = new TableScreen(xValue, yValue, percent);
+                                        TableScreen.setVisible(true);
+                                        setVisible(false);
+                                    }
+                                });
+                            } else {
+                                errorLabel.setText("Percent must be between 5 and 70");
+                            }
+                        } else {
+                            errorLabel.setText("First values must be between 5 and 50");
+                        }
+                    } catch (NumberFormatException exception) {
+                        errorLabel.setText("Please enter a number in all lines");
+                    }
+
+                }
         });
     }
 }
