@@ -148,4 +148,12 @@ public class TableFunctions {
         }
         System.out.println(bombCount);
     }
+
+    public boolean checkBomb(int x, int y){
+        if (table[y][x].equals("b")){
+            return true;
+        }else {
+            return false;
+        }
+    }
 }
