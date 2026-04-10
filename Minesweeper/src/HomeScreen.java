@@ -28,7 +28,7 @@ public class HomeScreen extends JFrame {
             public void actionPerformed(ActionEvent e) {
                     try {
                         xValue = Integer.parseInt(xSizeField.getText());
-                        yValue = Integer.parseInt(ySizeField.getText());
+                        yValue = Integer.parseInt(xSizeField.getText());
                         percent = Integer.parseInt(percentSizeField.getText());
 
                         if (xValue >= 5 && xValue <= 50 && yValue >= 5 && yValue <= 50) {

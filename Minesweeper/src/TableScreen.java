@@ -8,6 +8,7 @@ public class TableScreen extends JFrame {
     JPanel pane;
     JPanel mainPanel;
     JPanel topPanel;
+    JLabel bombLabel;
     static JButton[][] displayedTable;
     JButton derol;
     ImageIcon unchartedTile = new ImageIcon("src/Sprites/UnchartedTile.png");
@@ -22,7 +23,8 @@ public class TableScreen extends JFrame {
         //declare variables
         firstClick = false;
         alive = true;
-        derol = new JButton();
+        bombLabel = new JLabel("Bombs left:" + (xSize*ySize)*(percent/100));
+        derol = new JButton((resizeIcon(derolTile, 50, 50)));
         //set window
         setTitle("Minesweeper");
         displayedTable = new JButton[xSize][ySize];
@@ -30,20 +32,26 @@ public class TableScreen extends JFrame {
         setPreferredSize(new Dimension(800, 800));
         setResizable(false);
         //set panes
-        pane.setLayout(new GridLayout(xSize, ySize+1));
-        mainPanel = new JPanel();
-        topPanel = new JPanel();
-        topPanel.add(derol);
-        mainPanel.add(topPanel);
-        mainPanel.add(pane);
-        setContentPane(mainPanel);
+        pane.setLayout(new GridLayout(xSize, ySize));
         //set size and layout
         mainPanel.setLayout(new BoxLayout(mainPanel,BoxLayout.PAGE_AXIS));
         topPanel.setLayout(new BoxLayout(topPanel,BoxLayout.LINE_AXIS));
+
         topPanel.setPreferredSize(new Dimension(50,50));
         //size
+        setContentPane(mainPanel);
         derol.setSize(new Dimension(40,40));
-        derol.setIcon(resizeIcon(derolTile, 40, 40));
+        derol.setMargin(new Insets(0,-2,0,-2));
+        //axis
+        //add pane
+        topPanel.add(Box.createHorizontalGlue());
+        topPanel.add(bombLabel);
+        topPanel.add(Box.createHorizontalGlue());
+        topPanel.add(derol);
+        topPanel.add(Box.createHorizontalGlue());
+        topPanel.add(Box.createHorizontalGlue());
+        mainPanel.add(topPanel);
+        mainPanel.add(pane);
         //create table
         runTable(xSize, ySize);
         sizeBorder(xSize,ySize);
