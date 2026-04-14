@@ -3,6 +3,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class TableScreen extends JFrame {
     JPanel pane;
@@ -14,16 +16,18 @@ public class TableScreen extends JFrame {
     ImageIcon unchartedTile = new ImageIcon("src/Sprites/UnchartedTile.png");
     ImageIcon chartedTile = new ImageIcon("src/Sprites/ChartedTile.png");
     ImageIcon derolTile = new ImageIcon("src/Sprites/Derol.png");
+    ImageIcon flagTile = new ImageIcon("src/Sprites/FlaggedTile.png");
     double widthHeight;
     TableFunctions table;
     boolean firstClick;
     boolean alive;
+    int bombAmount;
 
     public TableScreen(int xSize, int ySize, int percent) {
         //declare variables
         firstClick = false;
         alive = true;
-        bombLabel = new JLabel("Bombs left:" + (xSize*ySize)*(percent/100));
+        bombLabel = new JLabel("Bombs left:");
         derol = new JButton((resizeIcon(derolTile, 50, 50)));
         //set window
         setTitle("Minesweeper");
@@ -62,6 +66,22 @@ public class TableScreen extends JFrame {
             for (int x = 0; x < xSize; x++) {
                 int finalX = x;
                 int finalY = y;
+                displayedTable[y][x].addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                        if (SwingUtilities.isRightMouseButton(e)){
+                            int widthHeight = displayedTable[finalY][finalX].getHeight();
+                           if (displayedTable[finalY][finalX].getIcon().equals(resizeIcon(flagTile, widthHeight, widthHeight))){
+                               displayedTable[finalY][finalX].setIcon(resizeIcon(unchartedTile, widthHeight, widthHeight));
+                               System.out.println("unflag");
+                           }else{
+                               displayedTable[finalY][finalX].setIcon(resizeIcon(flagTile, widthHeight, widthHeight));
+                               System.out.println("flagged");
+                           }
+                        }
+                    }
+                });
+
                 displayedTable[y][x].addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -69,6 +89,8 @@ public class TableScreen extends JFrame {
                             table = new TableFunctions(xSize, ySize, percent, finalX, finalY);
                             table.debug();
                             firstClick = true;
+                            bombAmount = table.bombCount;
+                            bombLabel.setText("Bombs left: "+ bombAmount);
                         } else {
                             if (alive) {
                                 if (table.checkBomb(finalX, finalY) == true) {
