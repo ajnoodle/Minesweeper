@@ -17,7 +17,7 @@ public class TableScreen extends JFrame {
     ImageIcon chartedTile = new ImageIcon("src/Sprites/ChartedTile.png");
     ImageIcon derolTile = new ImageIcon("src/Sprites/Derol.png");
     ImageIcon flagTile = new ImageIcon("src/Sprites/FlaggedTile.png");
-    double widthHeight;
+    int widthHeight;
     TableFunctions table;
     boolean firstClick;
     boolean alive;
@@ -66,21 +66,7 @@ public class TableScreen extends JFrame {
             for (int x = 0; x < xSize; x++) {
                 int finalX = x;
                 int finalY = y;
-                displayedTable[y][x].addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mousePressed(MouseEvent e) {
-                        if (SwingUtilities.isRightMouseButton(e)){
-                            int widthHeight = displayedTable[finalY][finalX].getHeight();
-                           if (displayedTable[finalY][finalX].getIcon().equals(resizeIcon(flagTile, widthHeight, widthHeight))){
-                               displayedTable[finalY][finalX].setIcon(resizeIcon(unchartedTile, widthHeight, widthHeight));
-                               System.out.println("unflag");
-                           }else{
-                               displayedTable[finalY][finalX].setIcon(resizeIcon(flagTile, widthHeight, widthHeight));
-                               System.out.println("flagged");
-                           }
-                        }
-                    }
-                });
+
 
                 displayedTable[y][x].addActionListener(new ActionListener() {
                     @Override
@@ -93,16 +79,41 @@ public class TableScreen extends JFrame {
                             bombLabel.setText("Bombs left: "+ bombAmount);
                         } else {
                             if (alive) {
-                                if (table.checkBomb(finalX, finalY) == true) {
-                                    System.out.println("Game over!");
-                                    alive = false;
+                                if (!table.checkForFlag(finalY,finalX)) {
+                                    if (table.checkBomb(finalX, finalY) == true) {
+                                        System.out.println("Game over!");
+                                        alive = false;
+                                    }
                                 }
-
                             }
                         }
                     }
                 });
-            }
+
+                    displayedTable[y][x].addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mousePressed(MouseEvent e) {
+                            if (SwingUtilities.isRightMouseButton(e)) {
+                                if (firstClick) {
+                                    if (table.checkForFlag(finalY,finalX)) {
+                                        displayedTable[finalY][finalX].setIcon(resizeIcon(unchartedTile, widthHeight, widthHeight));
+                                        table.deflagTile(finalY,finalX);
+                                        table.debug();
+                                        System.out.println("unflag");
+                                    } else {
+                                        displayedTable[finalY][finalX].setIcon(resizeIcon(flagTile, widthHeight, widthHeight));
+                                        table.flagTile(finalY, finalX);
+                                        table.debug();
+                                        System.out.println("flagged");
+                                        bombAmount = bombAmount - 1;
+
+
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
         }
 
 
@@ -137,7 +148,7 @@ public class TableScreen extends JFrame {
         pack();
         for (int h = 0; h < ySize; h++) {
             for (int w = 0; w < xSize; w++) {
-                widthHeight = Math.sqrt(pane.getHeight()*pane.getHeight() / (xSize * ySize));
+                widthHeight = (int) Math.sqrt(pane.getHeight()*pane.getHeight() / (xSize * ySize));
                 int intWH = (int) widthHeight;
                 displayedTable[h][w].setMargin(new Insets(0,0,0,0));
                 displayedTable[h][w].setBorder(BorderFactory.createEmptyBorder());

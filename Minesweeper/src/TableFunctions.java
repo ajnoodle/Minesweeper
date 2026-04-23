@@ -156,4 +156,20 @@ public class TableFunctions {
             return false;
         }
     }
+
+    public void flagTile(int y, int x){
+        table[y][x] = "F" + table[y][x];
+    }
+
+    public void deflagTile(int y, int x){
+       table[y][x] = table[y][x].replaceFirst("F", "");
+    }
+
+    public boolean checkForFlag(int y, int x){
+        if(table[y][x].startsWith("F")){
+            return true;
+        }else {
+            return false;
+        }
+    }
 }
