@@ -78,6 +78,7 @@ public class TableScreen extends JFrame {
                             bombAmount = table.bombCount;
                             bombLabel.setText("Bombs left: "+ bombAmount);
                         } else {
+                            table.debug();
                             if (alive) {
                                 if (!table.checkForFlag(finalY,finalX)) {
                                     if (table.checkBomb(finalX, finalY) == true) {
@@ -99,12 +100,10 @@ public class TableScreen extends JFrame {
                                         displayedTable[finalY][finalX].setIcon(resizeIcon(unchartedTile, widthHeight, widthHeight));
                                         table.deflagTile(finalY,finalX);
                                         table.debug();
-                                        System.out.println("unflag");
                                     } else {
                                         displayedTable[finalY][finalX].setIcon(resizeIcon(flagTile, widthHeight, widthHeight));
                                         table.flagTile(finalY, finalX);
                                         table.debug();
-                                        System.out.println("flagged");
                                         bombAmount = bombAmount - 1;
 
 
@@ -159,4 +158,6 @@ public class TableScreen extends JFrame {
         pane.setBorder(BorderFactory.createEmptyBorder(0, topPanel.getHeight(), 0, topPanel.getHeight()));
 
     }
+
+
 }

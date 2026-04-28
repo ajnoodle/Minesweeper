@@ -172,4 +172,26 @@ public class TableFunctions {
             return false;
         }
     }
+
+    public void revealTiles(int y, int x){
+        if(table[y][x].startsWith("x") || (table[y][x].startsWith("0"))){
+            table[y][x] = table[y][x] + "C";
+            revealNeighbors(x, y-1);
+            revealNeighbors(x+1, y-1);
+            revealNeighbors(x+1, y);
+            revealNeighbors(x+1, y+1);
+            revealNeighbors(x, y+1);
+            revealNeighbors(x-1, y+1);
+            revealNeighbors(x-1, y);
+            revealNeighbors(x-1, y-1);
+
+        }else if (!table[y][x].startsWith("F") || (!table[y][x].endsWith("C"))){
+            table[y][x] = table[y][x] + "C";
+        }
+    }
+
+    public void revealNeighbors(int x, int y){
+        table[y][x] = table[y][x] + "C";
+        revealTiles(y,x);
+    }
 }
