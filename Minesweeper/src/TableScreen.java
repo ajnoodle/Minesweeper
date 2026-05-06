@@ -88,6 +88,7 @@ public class TableScreen extends JFrame {
                                 }
                             }
                         }
+                        table.revealTiles(finalY, finalX);
                     }
                 });
 
