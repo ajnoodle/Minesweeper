@@ -119,7 +119,7 @@ public class TableFunctions {
                         }
                     }
 
-                    if (bombNumber > 0){
+                    if (bombNumber > 0) {
                         table[yint][xint] = Integer.toString(bombNumber);
                     }
                 }
@@ -130,7 +130,6 @@ public class TableFunctions {
     public void clearTable(int clickX, int clickY) {
 
     }
-
 
 
     /**
@@ -149,65 +148,115 @@ public class TableFunctions {
         System.out.println(bombCount);
     }
 
-    public boolean checkBomb(int x, int y){
-        if (table[y][x].equals("b")){
+    public boolean checkBomb(int x, int y) {
+        if (table[y][x].equals("b")) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
 
-    public void flagTile(int y, int x){
+    public void flagTile(int y, int x) {
         table[y][x] = "F" + table[y][x];
     }
 
-    public void deflagTile(int y, int x){
-       table[y][x] = table[y][x].replaceFirst("F", "");
+    public void deflagTile(int y, int x) {
+        table[y][x] = table[y][x].replaceFirst("F", "");
     }
 
-    public boolean checkForFlag(int y, int x){
-        if(table[y][x].startsWith("F")){
+    public boolean checkForFlag(int y, int x) {
+        if (table[y][x].startsWith("F")) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
 
-    public void revealNeighbors(int x, int y){
-        if(x < 0){
-            return;
-        } else if ( x >= table.length){
-            return;
-        }else if(y < 0){
-            return;
-        }else if ( y >= table.length){
+    public void revealNeighbors(int x, int y) {
+        //check if numbers are on the table
+        if (x >= 0 && x < table.length) {
+            if (y >= 0 && y < table.length) {
+
+                revealTiles(y, x);
+            }
+        }
+    }
+
+    public void revealTiles(int y, int x) {
+        //if tile blank, clear tile and nearby tiles
+        if (table[y][x].endsWith("C")) {
             return;
         }
-        else if(table[x][y].endsWith("C")){
-            return;
+        if (table[y][x].startsWith("x") || table[y][x].startsWith("0")) {
+            table[y][x] = table[y][x] + "C";
+            revealNeighbors(x, y - 1);
+            revealNeighbors(x + 1, y - 1);
+            revealNeighbors(x + 1, y);
+            revealNeighbors(x + 1, y + 1);
+            revealNeighbors(x, y + 1);
+            revealNeighbors(x - 1, y + 1);
+            revealNeighbors(x - 1, y);
+            revealNeighbors(x - 1, y - 1);
+            //if tile is not blank, check for flagging and bombs
+            //ignore if flagged or bomb
+        } else if (!table[y][x].startsWith("F") || !table[y][x].equals("b")) {
+            //check for number tile
+            for (int v = 1; v < 8; v++) {
+                String vS = Integer.toString(v);
+                if (table[y][x].equals(vS)) {
+                    table[y][x] = table[y][x] + "C";
+                }
+            }
+        }
+    }
+
+
+    enum returnedTile {
+        KEEP_SAME,
+        CLEAR,
+        ONE,
+        TWO,
+        THREE,
+        FOUR,
+        FIVE,
+        SIX,
+        SEVEN,
+        EIGHT
+
+    }
+
+    public returnedTile checkForClear(int y, int x) {
+        if (table[y][x].equals("0C") || table[y][x].equals("xC")) {
+            return returnedTile.CLEAR;
+        } else if (table[y][x].equals("1C")) {
+            return returnedTile.ONE;
+        } else if (table[y][x].equals("2C")) {
+            return returnedTile.TWO;
+        } else if (table[y][x].equals("3C")) {
+            return returnedTile.THREE;
+        } else if (table[y][x].equals("4C")) {
+            return returnedTile.FOUR;
+        } else if (table[y][x].equals("5C")) {
+            return returnedTile.FIVE;
+        } else if (table[y][x].equals("6C")) {
+            return returnedTile.SIX;
+        } else if (table[y][x].equals("7C")) {
+            return returnedTile.SEVEN;
+        } else if (table[y][x].equals("8C")) {
+            return returnedTile.EIGHT;
+        } else {
+            return returnedTile.KEEP_SAME;
+        }
+    }
+
+    public boolean checkBombEnd(int y, int x){
+        if (table[y][x].equals("b") || (table[y][x].equals("Fb"))){
+            return true;
         }else{
-        table[y][x] = table[y][x] + "C";
-        revealTiles(y,x);
+            return false;
         }
     }
-
-    public void revealTiles(int y, int x){
-        if(table[y][x].startsWith("x") || (table[y][x].startsWith("0"))){
-            if(!table[y][x].endsWith("C") ){
-            table[y][x] = table[y][x] + "C";
-            revealNeighbors(x, y-1);
-            revealNeighbors(x+1, y-1);
-            revealNeighbors(x+1, y);
-            revealNeighbors(x+1, y+1);
-            revealNeighbors(x, y+1);
-            revealNeighbors(x-1, y+1);
-            revealNeighbors(x-1, y);
-            revealNeighbors(x-1, y-1);
-}
-        }else if (!table[y][x].startsWith("F") || (!table[y][x].endsWith("C"))){
-            table[y][x] = table[y][x] + "C";
-        }
     }
 
 
-}
+
