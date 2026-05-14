@@ -210,6 +210,21 @@ public class TableFunctions {
         }
     }
 
+    public boolean checkForWin(int y, int x){
+        for (int xint = 0; xint < x; xint++) {
+            for (int yint = 0; yint < y; yint++) {
+                for (int num = 0; num < 8; num++) {
+                    String number = Integer.toString(num);
+                    if (table[yint][xint].equals(number) || table[yint][xint].equals("x") || table[yint][xint].equals("F" + number) || table[yint][xint].equals("F" + "x")) {
+                            return false;
+
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
 
     enum returnedTile {
         KEEP_SAME,
@@ -255,6 +270,17 @@ public class TableFunctions {
         }else{
             return false;
         }
+    }
+
+    public boolean checkIfFlaggable(int yint, int xint) {
+        for (int num = 0; num < 8; num++) {
+            String number = Integer.toString(num);
+            if (table[yint][xint].equals(number) || table[yint][xint].equals("x") || table[yint][xint].equals("b")){
+                return true;
+
+            }
+        }
+        return false;
     }
     }
 

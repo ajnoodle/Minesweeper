@@ -18,8 +18,8 @@ public class TableScreen extends JFrame {
     ImageIcon derolTile = new ImageIcon("src/Sprites/Derol.png");
     ImageIcon flagTile = new ImageIcon("src/Sprites/FlaggedTile.png");
     ImageIcon boomTile = new ImageIcon("src/Sprites/BoomTile.png");
-    ImageIcon winTile = new ImageIcon("src/Sprites/WinDerolTile.png");
-    ImageIcon loseTile = new ImageIcon("src/Sprites/DeadDerolTile.png");
+    ImageIcon winTile = new ImageIcon("src/Sprites/WinDerol.png");
+    ImageIcon loseTile = new ImageIcon("src/Sprites/DeadDerol.png");
     ImageIcon oneTile = new ImageIcon("src/Sprites/OneTile.png");
     ImageIcon twoTile = new ImageIcon("src/Sprites/TwoTile.png");
     ImageIcon threeTile = new ImageIcon("src/Sprites/ThreeTile.png");
@@ -57,6 +57,7 @@ public class TableScreen extends JFrame {
         setContentPane(mainPanel);
         derol.setSize(new Dimension(40, 40));
         derol.setMargin(new Insets(0, -2, 0, -2));
+        derol.setMinimumSize(derol.getSize());
         //axis
         //add pane
         topPanel.add(Box.createHorizontalGlue());
@@ -79,6 +80,8 @@ public class TableScreen extends JFrame {
                 int finalY = y;
 
 
+
+
                 displayedTable[y][x].addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -86,82 +89,95 @@ public class TableScreen extends JFrame {
                         if (!firstClick) {
                             table = new TableFunctions(xSize, ySize, percent, finalX, finalY);
                             table.revealTiles(finalY, finalX);
-                            table.debug();
+
                             firstClick = true;
                             bombAmount = table.bombCount;
                             bombLabel.setText("Bombs left: " + bombAmount);
+                            if (table.checkForWin(ySize, xSize)) {
+                                derol.setIcon((resizeIcon(winTile, derol.getWidth(), derol.getHeight())));
+                                alive = false;
+                            }
                         } else {
-                            table.debug();
                             if (alive) {
                                 if (!table.checkForFlag(finalY, finalX)) {
                                     if (table.checkBomb(finalX, finalY) == true) {
 
-                                        System.out.println("Game over!");
+
                                         for (int y = 0; y < ySize; y++) {
                                             for (int x = 0; x < xSize; x++) {
                                                 boolean bomb = table.checkBombEnd(y, x);
                                                 if (bomb) {
                                                     displayedTable[y][x].setIcon(resizeIcon(boomTile, widthHeight, widthHeight));
                                                 }
-                                                derol.setIcon((resizeIcon(loseTile, 100, 100)));
-                                                derol.setSize(new Dimension(100, 100));
-                                                derol.setMargin(new Insets(0, -2, 0, -2));
+
                                             }
                                         }
+                                        derol.setIcon(resizeIcon(loseTile, derol.getWidth(), derol.getHeight()));
+
                                         alive = false;
                                     }
                                     table.revealTiles(finalY, finalX);
                                 }
                             }
+                            if (table.checkForWin(ySize, xSize)) {
+                                derol.setIcon((resizeIcon(winTile, derol.getWidth(), derol.getHeight())));
+                                alive = false;
+                            }
                         }
 
                         //update tiles when clicked
-                        for (int y = 0; y < ySize; y++) {
-                            for (int x = 0; x < xSize; x++) {
-                                TableFunctions.returnedTile returnStatement = table.checkForClear(y, x);
-                                if (returnStatement == TableFunctions.returnedTile.CLEAR) {
-                                    displayedTable[y][x].setIcon(resizeIcon(chartedTile, widthHeight, widthHeight));
-                                } else if (returnStatement == TableFunctions.returnedTile.ONE) {
-                                    displayedTable[y][x].setIcon(resizeIcon(oneTile, widthHeight, widthHeight));
-                                } else if (returnStatement == TableFunctions.returnedTile.TWO) {
-                                    displayedTable[y][x].setIcon(resizeIcon(twoTile, widthHeight, widthHeight));
-                                } else if (returnStatement == TableFunctions.returnedTile.THREE) {
-                                    displayedTable[y][x].setIcon(resizeIcon(threeTile, widthHeight, widthHeight));
-                                } else if (returnStatement == TableFunctions.returnedTile.FOUR) {
-                                    displayedTable[y][x].setIcon(resizeIcon(fourTile, widthHeight, widthHeight));
-                                } else if (returnStatement == TableFunctions.returnedTile.FIVE) {
-                                    displayedTable[y][x].setIcon(resizeIcon(fiveTile, widthHeight, widthHeight));
-                                } else if (returnStatement == TableFunctions.returnedTile.SIX) {
-                                    displayedTable[y][x].setIcon(resizeIcon(sixTile, widthHeight, widthHeight));
-                                } else if (returnStatement == TableFunctions.returnedTile.SEVEN) {
-                                    displayedTable[y][x].setIcon(resizeIcon(sevenTile, widthHeight, widthHeight));
-                                } else if (returnStatement == TableFunctions.returnedTile.EIGHT) {
-                                    displayedTable[y][x].setIcon(resizeIcon(eightTile, widthHeight, widthHeight));
+
+                            for (int y = 0; y < ySize; y++) {
+                                for (int x = 0; x < xSize; x++) {
+                                    TableFunctions.returnedTile returnStatement = table.checkForClear(y, x);
+                                    if (returnStatement == TableFunctions.returnedTile.CLEAR) {
+                                        displayedTable[y][x].setIcon(resizeIcon(chartedTile, widthHeight, widthHeight));
+                                    } else if (returnStatement == TableFunctions.returnedTile.ONE) {
+                                        displayedTable[y][x].setIcon(resizeIcon(oneTile, widthHeight, widthHeight));
+                                    } else if (returnStatement == TableFunctions.returnedTile.TWO) {
+                                        displayedTable[y][x].setIcon(resizeIcon(twoTile, widthHeight, widthHeight));
+                                    } else if (returnStatement == TableFunctions.returnedTile.THREE) {
+                                        displayedTable[y][x].setIcon(resizeIcon(threeTile, widthHeight, widthHeight));
+                                    } else if (returnStatement == TableFunctions.returnedTile.FOUR) {
+                                        displayedTable[y][x].setIcon(resizeIcon(fourTile, widthHeight, widthHeight));
+                                    } else if (returnStatement == TableFunctions.returnedTile.FIVE) {
+                                        displayedTable[y][x].setIcon(resizeIcon(fiveTile, widthHeight, widthHeight));
+                                    } else if (returnStatement == TableFunctions.returnedTile.SIX) {
+                                        displayedTable[y][x].setIcon(resizeIcon(sixTile, widthHeight, widthHeight));
+                                    } else if (returnStatement == TableFunctions.returnedTile.SEVEN) {
+                                        displayedTable[y][x].setIcon(resizeIcon(sevenTile, widthHeight, widthHeight));
+                                    } else if (returnStatement == TableFunctions.returnedTile.EIGHT) {
+                                        displayedTable[y][x].setIcon(resizeIcon(eightTile, widthHeight, widthHeight));
+                                    }
                                 }
                             }
                         }
-                    }
+
                 });
 
                 displayedTable[y][x].addMouseListener(new MouseAdapter() {
                     @Override
                     public void mousePressed(MouseEvent e) {
-                        if (SwingUtilities.isRightMouseButton(e)) {
-                            if (firstClick) {
-                                if (table.checkForFlag(finalY, finalX)) {
-                                    displayedTable[finalY][finalX].setIcon(resizeIcon(unchartedTile, widthHeight, widthHeight));
-                                    table.deflagTile(finalY, finalX);
-                                    bombAmount = bombAmount + 1;
-                                    bombLabel.setText("Bombs left: " + bombAmount);
-                                    table.debug();
-                                } else {
-                                    displayedTable[finalY][finalX].setIcon(resizeIcon(flagTile, widthHeight, widthHeight));
-                                    table.flagTile(finalY, finalX);
-                                    table.debug();
-                                    bombAmount = bombAmount - 1;
-                                    bombLabel.setText("Bombs left: " + bombAmount);
+                        if (alive) {
+                            if (SwingUtilities.isRightMouseButton(e)) {
+                                if (firstClick) {
 
+                                    if (table.checkForFlag(finalY, finalX)) {
+                                        displayedTable[finalY][finalX].setIcon(resizeIcon(unchartedTile, widthHeight, widthHeight));
+                                        table.deflagTile(finalY, finalX);
+                                        bombAmount = bombAmount + 1;
+                                        bombLabel.setText("Bombs left: " + bombAmount);
 
+                                    } else {
+                                        boolean flaggable = table.checkIfFlaggable(finalY,finalX);
+                                        if (flaggable) {
+                                            displayedTable[finalY][finalX].setIcon(resizeIcon(flagTile, widthHeight, widthHeight));
+                                            table.flagTile(finalY, finalX);
+
+                                            bombAmount = bombAmount - 1;
+                                            bombLabel.setText("Bombs left: " + bombAmount);
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -170,6 +186,20 @@ public class TableScreen extends JFrame {
             }
         }
 
+        derol.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        HomeScreen HomeScreen = new HomeScreen();
+                        HomeScreen.setVisible(true);
+                        setVisible(false);
+                        dispose();
+                    }
+                });
+            }
+
+        });
 
         pack();
 
